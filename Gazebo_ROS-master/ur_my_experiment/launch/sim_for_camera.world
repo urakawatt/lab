@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+
+	<world name="default">
+		<include>
+			<uri>model://ground_plane</uri>
+		</include>
+		
+		<!-- Global light source -->
+		<include>
+			<uri>model://sun</uri>
+		</include>
+		
+		<!-- Focus camera on tall pendulum -->
+		<!--<gui fullscreen='0'>
+			<camera name='user_camera'>
+				<pose frame=''>0.335835 -0.310984 0.241033 0 0.275643 2.35619</pose>
+				<view_controller>orbit</view_controller>
+				<projection_type>perspective</projection_type>
+			</camera>
+		</gui>-->
+
+
+		<light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.5 -1</direction>
+    </light>
+
+
+
+
+
+		<model name='unit_sphere'>
+      <pose frame=''>1.14411 -1.30574 0.5 0 -0 0</pose>
+      <link name='link'>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.1</iyy>
+            <iyz>0</iyz>
+            <izz>0.1</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <sphere>
+              <radius>0.5</radius>
+            </sphere>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <sphere>
+              <radius>0.5</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+
+
+    <state world_name='default'>
+<model name='unit_sphere'>
+        <pose frame=''>1.14411 -1.30574 0.163291 0 -0 0</pose>
+        <scale>0.326581 0.326581 0.326581</scale>
+        <link name='link'>
+          <pose frame=''>1.14411 -1.30574 0.163291 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+
+      <light name='sun'>
+        <pose frame=''>0 0 10 0 -0 0</pose>
+      </light>
+      
+</state>
+
+
+
+	</world>
+</sdf>

@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find ur3_zedcamera_moveit_config)/launch/demo.launch"/>
+
+  <include file="$(find zed_rtabmap_example)/launch/zed_rtabmap.launch"/>
+</launch>

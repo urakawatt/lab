@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+
+	<world name="default">
+		<include>
+			<uri>model://ground_plane</uri>
+		</include>
+		
+		<!-- Global light source -->
+		<include>
+			<uri>model://sun</uri>
+		</include>
+		
+		<!-- Focus camera on tall pendulum -->
+		<!--<gui fullscreen='0'>
+			<camera name='user_camera'>
+				<pose frame=''>0.335835 -0.310984 0.241033 0 0.275643 2.35619</pose>
+				<view_controller>orbit</view_controller>
+				<projection_type>perspective</projection_type>
+			</camera>
+		</gui>-->
+
+		<!--<include>
+      		<uri>model://cafe_table</uri>
+      		<name>table2</name>
+      		<pose>1 1 0 0 0 1.57</pose>
+    	</include>-->
+
+		<include>
+			<uri>model://demo_cube</uri>
+			<pose>0.5 0.5 0.83 0 0 0</pose>
+		</include>
+
+
+		<light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.5 -1</direction>
+    </light>
+
+
+
+    <model name='unit_box'>
+      <pose frame=''>1.46555 -1.52339 0.5 0 -0 0</pose>
+      <link name='link'>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>1 0.999997 1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>1 0.999997 1</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+
+    <state world_name='default'>
+<model name='unit_box'>
+        <pose frame=''>1.22582 -0.726709 0.271859 -1e-06 -3e-06 4.2e-05</pose>
+        <scale>0.540614 0.083603 0.54373</scale>
+        <link name='link'>
+          <pose frame=''>1.22582 -0.726709 0.271859 -1e-06 -3e-06 4.2e-05</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
+        </link>
+      </model>
+
+      <light name='sun'>
+        <pose frame=''>0 0 10 0 -0 0</pose>
+      </light>
+      
+</state>
+
+
+
+	</world>
+</sdf>

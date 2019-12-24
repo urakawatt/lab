@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<robot name="simple_arm">
+
+  <link name="world"/>
+
+  <!--base link-->
+  <link name="base">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
+      <geometry>
+        <box size="0.02 0.02 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
+      <geometry>
+        <box size="0.02 0.02 0.1"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.8 0.8 0.8 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
+      <mass value="1"/>
+      <inertia ixx="0.083" ixy="0.0" ixz="0.0"
+               iyy="0.083" iyz="0.0"
+               izz="0.0000666"/>
+      <!-- Ixx = (1/12)*M*(y^2+z^2)  Iyy = (1/12)*M*(x^2+z^2)  Izz = (1/12)*M*(x^2+y^2) -->
+    </inertial>
+  </link>
+
+  <!--first_arm link-->
+  <link name="first_arm">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry>
+        <box size="0.02 0.02 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry>
+        <box size="0.02 0.02 0.1"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.8 0.8 0.8 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <mass value="1"/>
+      <inertia ixx="0.083" ixy="0.0" ixz="0.0"
+               iyy="0.083" iyz="0.0"
+               izz="0.0000666"/>
+    </inertial>
+  </link>
+
+  <!--second_arm link-->
+  <link name="second_arm">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry>
+        <box size="0.02 0.02 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry>
+        <box size="0.02 0.02 0.1"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.8 0.8 0.8 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <mass value="1"/>
+      <inertia ixx="0.083" ixy="0.0" ixz="0.0"
+               iyy="0.083" iyz="0.0"
+               izz="0.0000666"/>
+    </inertial>
+  </link>
+
+  <!--world to base fixed-->
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base"/>
+  </joint>
+
+  <!--base to first_arm joint-->
+  <joint name="joint1" type="revolute">
+    <parent link="base"/>
+    <child link="first_arm"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0 0.09"/>
+    <limit effort="1000" lower="-2.0" upper="2.0" velocity="0.5"/>
+  </joint>
+
+  <joint name="joint2" type="revolute">
+    <parent link="first_arm"/>
+    <child link="second_arm"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0 0.09"/>
+    <limit effort="1000" lower="-2.0" upper="2.0" velocity="0.5"/>
+  </joint>
+
+</robot>

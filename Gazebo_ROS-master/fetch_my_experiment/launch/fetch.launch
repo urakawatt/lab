@@ -1,0 +1,15 @@
+<launch>
+
+  <env name="GAZEBO_MODEL_PATH" value="$(find fetch_my_experiment)/models:$(optenv GAZEBO_MODEL_PATH)" />
+  
+  <include file="$(find fetch_my_experiment)/launch/simulation.launch" />
+
+  <!-- Start MoveIt -->
+  <include file="$(find fetch_moveit_config)/launch/move_group.launch" >
+    <arg name="info" value="true"/><!-- publish grasp markers -->
+  </include>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fetch_my_experiment)/launch/fetch.rviz" />
+  
+  
+</launch>

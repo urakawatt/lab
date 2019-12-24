@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+
+
+
+  <env name="GAZEBO_MODEL_PATH" value="$(find ur_my_experiment)/models:$(optenv GAZEBO_MODEL_PATH)" />
+
+  <include file="$(find ur_my_experiment)/launch/ur3.launch">
+    <arg name="limited" value="true" />
+  </include>
+  
+  <include file="$(find ur3_zedcamera_moveit_config)/launch/ur3_moveit_planning_execution.launch">
+    <arg name="sim" value="true" />
+    <!-- <arg name="limited" value="true" /> -->
+  </include>
+
+  <!-- <include file="$(find ur3_zedcamera_moveit_config)/launch/moveit_rviz.launch">
+     <arg name="config" value="true" /> 
+  </include> -->
+  
+
+</launch>

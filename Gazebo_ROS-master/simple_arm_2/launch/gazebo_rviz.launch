@@ -1,0 +1,20 @@
+<launch>
+  
+  <!-- gazebo -->
+  <include file="$(find simple_arm_2)/launch/gazebo.launch"/>
+
+
+  <!-- rviz -->
+  <arg name="model" default="$(find simple_arm_2)/urdf/simple_arm.urdf" />
+  <arg name="gui" default="True"/>
+  <param name="robot_description" textfile="$(arg model)"/>
+  <param name="use_gui" value="$(arg gui)"/>
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find simple_arm_2)/launch/urdf.rviz"/>
+  
+
+  <!-- control node python script -->  
+  <node name="joint_control" pkg="simple_arm_2" type="joint_control.py" />
+
+
+</launch>

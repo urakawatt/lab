@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+
+	<world name="default">
+		<include>
+			<uri>model://ground_plane</uri>
+		</include>
+		
+		<!-- Global light source -->
+		<include>
+			<uri>model://sun</uri>
+		</include>
+		
+		<!-- Focus camera on tall pendulum -->
+		<!--<gui fullscreen='0'>
+			<camera name='user_camera'>
+				<pose frame=''>0.335835 -0.310984 0.241033 0 0.275643 2.35619</pose>
+				<view_controller>orbit</view_controller>
+				<projection_type>perspective</projection_type>
+			</camera>
+		</gui>-->
+
+		<include>
+			<uri>model://box</uri>
+			<pose>1.7 0 0 0 0 0</pose>
+		</include>
+
+		<include>
+			<uri>model://coke</uri>
+			<!--<pose>1.71 0 1.0 0 0 0</pose>-->
+			<pose>1.9545 0.195454 0.7 0 0 0</pose>
+		</include>
+
+		<include>
+			<uri>model://demo_cube</uri>
+			<!--<pose>1.75 0 1.0 0 0 0</pose>-->
+			<pose frame=''>1.51356 0.01009 0.625995 0 0 0</pose>
+		</include>
+	</world>
+</sdf>

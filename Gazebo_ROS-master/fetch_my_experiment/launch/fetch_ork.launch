@@ -1,0 +1,29 @@
+<launch>
+
+  <env name="GAZEBO_MODEL_PATH" value="$(find fetch_my_experiment)/models:$(optenv GAZEBO_MODEL_PATH)" />
+  
+  <include file="$(find fetch_my_experiment)/launch/simulation.launch" />
+
+  <!-- Start MoveIt -->
+  <include file="$(find fetch_moveit_config)/launch/move_group.launch" >
+    <arg name="info" value="true"/><!-- publish grasp markers -->
+  </include>
+
+  <!-- Start Perception -->
+  <!--<node name="basic_grasping_perception" pkg="simple_grasping" type="basic_grasping_perception" >
+    <rosparam command="load" file="$(find fetch_gazebo_demo)/config/simple_grasping.yaml" />
+  </node>-->
+
+  <!--<node name="table_top" pkg="object_recognition_core" type="detection" args="-c $(find fetch_my_experiment)/config/detection.table.ros.ork" />-->
+  <node name="table_top_object" pkg="object_recognition_core" type="detection" args="-c $(find fetch_my_experiment)/config/detection.object.ros.ork" />
+
+  
+  <!--<node name="rviz" pkg="rviz" type="rviz" />-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fetch_my_experiment)/launch/fetch_ork.rviz" />
+  <!--<include file="$(find fetch_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true" />y
+  </include>
+  -->
+  
+  
+</launch>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <env name="GAZEBO_MODEL_PATH" value="$(find ur_my_experiment)/models:$(optenv GAZEBO_MODEL_PATH)" />
+
+  <arg name="limited" default="true"/>
+  <arg name="paused" default="false"/>
+  <arg name="gui" default="true"/>
+  
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find ur_my_experiment)/launch/sim_for_camera.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+  <!--
+  <node name="gazebo" pkg="gazebo_ros" type="gzserver" 
+   args="$(find ur_my_experiment)/launch/sim.world" respawn="false" output="screen" />
+  <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
+  -->
+
+
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find ur_my_experiment)/urdf/ur_and_camera.urdf.xacro'" />
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot" respawn="false" output="screen" />
+  <include file="$(find ur_gazebo)/launch/controller_utils.launch"/>
+  <rosparam file="$(find ur_gazebo)/controller/arm_controller_ur10.yaml" command="load"/>
+  <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller" respawn="false" output="screen"/>
+
+  <include file="$(find ur10_moveit_config)/launch/ur10_moveit_planning_execution.launch">
+    <arg name="sim" value="true" />
+    <arg name="limited" value="true" />
+  </include>
+
+  <!--<include file="$(find ur10_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true" />
+  </include>-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur_my_experiment)/launch/ur10_and_camera.rviz" />
+
+</launch>

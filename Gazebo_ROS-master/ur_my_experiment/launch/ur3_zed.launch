@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+   <include file="$(find ur_my_experiment)/launch/ur3_moveit.launch"/>  
+   <include file="$(find zed_rtabmap_example)/launch/zed_rtabmap.launch"/>
+</launch>

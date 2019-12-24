@@ -1,0 +1,20 @@
+<launch>
+  
+  <!-- gazebo -->
+  <include file="$(find simple_arm_2_with_gripper)/launch/gazebo.launch"/>
+
+
+  <!-- rviz -->
+  <arg name="gui" default="True"/>
+  <param name="robot_description" 
+    command="$(find xacro)/xacro.py '$(find simple_arm_2_with_gripper)/urdf/robot.urdf.xacro'" />
+  <param name="use_gui" value="$(arg gui)"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find simple_arm_2_with_gripper)/launch/urdf.rviz"/>
+  
+
+  <!-- control node python script -->  
+  <node name="joint_control" pkg="simple_arm_2_with_gripper" type="joint_control.py" />
+
+
+</launch>
