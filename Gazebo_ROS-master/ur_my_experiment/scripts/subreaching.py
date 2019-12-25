@@ -147,7 +147,7 @@ class Reaching:
     def waycallback(self,data):
         self.way_flag = data.data
 
-        self.wayflagcalc().
+        self.wayflagcalc()
 
     def wayflagcalc(self):
         if self.before_wayflag != self.way_flag:
