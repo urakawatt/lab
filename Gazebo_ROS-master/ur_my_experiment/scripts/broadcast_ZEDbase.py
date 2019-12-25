@@ -39,10 +39,12 @@ class MakeTF:
     
     def set_ZEDbase(self):
         listener = tf.TransformListener()
-
+        if rospy.is_shutdown():
+            return
         listener.waitForTransform('world','camera_base',rospy.Time(0),rospy.Duration(2.0))
         (self.trans,rot)=listener.lookupTransform('/world','/camera_base',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
-
+        if rospy.is_shutdown():
+            return
         print('trans = '+str(self.trans))
         self.br = tf.TransformBroadcaster()
         self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),(0.0,0.0,0.0,1.0),rospy.Time.now(),'base_forZED','world')
