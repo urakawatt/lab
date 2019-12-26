@@ -29,7 +29,7 @@ import sensor_msgs.point_cloud2 as pc2
 
 import tf
 
-
+import listen_pc
  
 
 class Reaching:
@@ -51,17 +51,18 @@ class Reaching:
         self.before_wayflag=False       #前フレームのway_flag
         self.infirst_frame=True         #最初のフレーム
         self.calc_way_flag=False
+        self.frame = 0
 
 
-    def set_ZEDbase(self):
-        listener = tf.TransformListener()
+    # def set_ZEDbase(self):
+    #     listener = tf.TransformListener()
 
-        listener.waitForTransform('world','ee_link',rospy.Time(0),rospy.Duration(2.0))
-        (self.trans,rot)=listener.lookupTransform('/world','/ee_link',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
+    #     listener.waitForTransform('world','ee_link',rospy.Time(0),rospy.Duration(2.0))
+    #     (self.trans,rot)=listener.lookupTransform('/world','/ee_link',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
 
-        print('trans = '+str(self.trans))
-        br = tf.TransformBroadcaster()
-        br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),(0.0,0.0,0.0,1.0),rospy.Time.now(),'base_forZED','world')
+    #     print('trans = '+str(self.trans))
+    #     br = tf.TransformBroadcaster()
+    #     br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),(0.0,0.0,0.0,1.0),rospy.Time.now(),'base_forZED','world')
             
         
     def set_forbidden(self):
@@ -101,7 +102,7 @@ class Reaching:
          #plan_standby   : execute button が押されるのを待つ 押されたら default へ  waypoint を使わなかった場合
         self.now_state=self.state['default']    #現在フレームの状態
 
-        self.set_ZEDbase()
+        # self.set_ZEDbase()
 
 
     def callback(self,data):    #トピックにデータが追加されるたびに呼ばれる
@@ -166,6 +167,7 @@ class Reaching:
         #rospy.Subscriber('/rtabmap/cloud_map', PointCloud2, self.rtabcallback) #zed で slam したpointcloud を購読
         rospy.Subscriber('/unity/execute',Bool,self.excallback)
         rospy.Subscriber('/unity/wayflag',Bool,self.waycallback)
+        rospy.Subscriber('/pcl/near_points', PointCloud2, self.create_object)
 
     def change_state(self,target):
          #self.state = {'default':0,'hold':1,'way_standby':2,'plan_standby':3}
@@ -206,7 +208,8 @@ class Reaching:
         
 
 
-
+    def create_object(self,data):
+        self.Points=[ data[0:3] for data in pc2.read_points(data)]
         
 
 
@@ -233,9 +236,9 @@ class Reaching:
             pose_target.position.y = self.subsc_pose[1]       #
             pose_target.position.z = self.subsc_pose[2]   #トピックから　座標を代入
 
-            br = tf.TransformBroadcaster()
-            br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),(0.0,0.0,0.8509035,0.525322),rospy.Time.now(),'base_forZED','world')
-            #逐一ブロードキャストする
+            # br = tf.TransformBroadcaster()
+            # br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),(0.0,0.0,0.8509035,0.525322),rospy.Time.now(),'base_forZED','world')
+            # #逐一ブロードキャストする
 
             
 
@@ -294,14 +297,13 @@ class Reaching:
                     group.go()
                     print(' Planning Go !!!')
             self.change_state(pose_target)
-            
-
-            
 
             self.before_executeFlag=self.executeFlag
             self.before_pose=pose_target.position
-           
-            rospy.sleep(2)  #1秒スリープ
+
+
+            self.frame += 1
+            rospy.sleep(2)  #2秒スリープ
 
 
 

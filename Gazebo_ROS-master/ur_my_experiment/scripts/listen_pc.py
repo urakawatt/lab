@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#pcl_linstener .cpp でダウンサンプルした点群の　座標とかを取ってきて処理とかして subreaching .py に渡す
+#点群の　座標とかを取ってきて処理とかして subreaching .py に渡す
 
 import rospy
 import std_msgs.msg
@@ -21,7 +21,7 @@ class SubscribePointCloud():
         self.Points=0
         rospy.init_node('subscribe_custom_point_cloud')
         self.listener = tf.TransformListener()
-        self.publisher = rospy.Publisher('/pcl/near_points',PointCloud2)
+        self.publisher = rospy.Publisher('/pcl/near_points',PointCloud2,queue_size=10)
         #self.t = self.listener.getLatestCommonTime('/base_link','/base_forZED')
 
         rospy.Subscriber('/rtabmap/cloud_map', PointCloud2, self.callback)
@@ -39,11 +39,11 @@ class SubscribePointCloud():
         
     
     def calc(self):
-        
+        self.listener.waitForTransform('world','base_forZED',rospy.Time(0),rospy.Duration(2.0))
         self.Points=[self.from_base(data) for data in self.Points]                  # 座標データをworld 座標系に変換
         #print(self.Points)
         print('\n\n    2   \nPoints  =  '+ str(len(self.Points))+'\n\n')
-        self.Points=[data for data in self.Points if self.Size(data)<0.5**2]        # ワールド座標系から見たときに半径0.5m より近くにあるデータだけを残す
+        self.Points=[data for data in self.Points if self.Size(data)<1**2]        # ワールド座標系から見たときに半径0.5m より近くにあるデータだけを残す
         #print(self.Points)
         print('\n\n   3    \n\n\n')
         
@@ -70,12 +70,12 @@ class SubscribePointCloud():
             return
         # tf を使って data に与えられる座標データを base_link 座標系に変換
         coo = geometry_msgs.msg.PoseStamped()
-        coo.header.frame_id = 'zed_camera_center'
+        coo.header.frame_id = 'base_forZED'
         coo.pose.orientation.w=1.0
         coo.pose.position.x=data[0]
         coo.pose.position.y=data[1]
         coo.pose.position.z=data[2]
-        result = self.listener.transformPose('/base_link',coo)
+        result = self.listener.transformPose('/world',coo)
         return [result.pose.position.x ,result.pose.position.y ,result.pose.position.z]
 
     def Size(self,data):
