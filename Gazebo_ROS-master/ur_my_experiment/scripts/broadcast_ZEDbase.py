@@ -28,8 +28,25 @@ import sensor_msgs.point_cloud2 as pc2
 
 import tf
 
+def quaternion_to_euler(quaternion):
+    """Convert Quaternion to Euler Angles
 
+    quarternion: geometry_msgs/Quaternion
+    euler: geometry_msgs/Vector3
+    """
+    e = tf.transformations.euler_from_quaternion((quaternion[0], quaternion[1], quaternion[2], quaternion[3]))
+    return [e[0], e[1], e[2]]
  
+def euler_to_quaternion(euler):
+    """Convert Euler Angles to Quaternion
+
+    euler: geometry_msgs/Vector3
+    quaternion: geometry_msgs/Quaternion
+    """
+    q = tf.transformations.quaternion_from_euler(euler[0], euler[1], euler[2])
+    return [q[0], q[1], q[2], q[3]]
+
+
 class MakeTF:
 
     def __init__(self):
@@ -42,18 +59,23 @@ class MakeTF:
         if rospy.is_shutdown():
             return
         listener.waitForTransform('world','camera_base',rospy.Time(0),rospy.Duration(2.0))
-        (self.trans,rot)=listener.lookupTransform('/world','/camera_base',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
+        (self.trans,self.rot)=listener.lookupTransform('/world','/camera_base',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
+        # x,y 平面は world のxy平面　と平行にしたいけど　z 軸回転はそのまま残したいので　roll pitch yaw に変換して yaw だけ残してほかは０にする
+        self.rot = euler_to_quaternion((0,0,quaternion_to_euler(self.rot)[2]))
+
         if rospy.is_shutdown():
             return
+        
+        
         print('trans = '+str(self.trans))
         self.br = tf.TransformBroadcaster()
-        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),(0.0,0.0,0.0,1.0),rospy.Time.now(),'base_forZED','world')
+        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'base_forZED','world')
 
 
     def Broadcast(self):
         if rospy.is_shutdown():
             return
-        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),(0.0,0.0,0.8509035,0.525322),rospy.Time.now(),'base_forZED','world')
+        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'base_forZED','world')
         
 
         
