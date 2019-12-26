@@ -4,6 +4,7 @@
 #pcl_linstener .cpp でダウンサンプルした点群の　座標とかを取ってきて処理とかして subreaching .py に渡す
 
 import rospy
+import std_msgs.msg
 from sensor_msgs.msg import PointCloud2,PointField
 import sensor_msgs.point_cloud2 as pc2
 import tf
@@ -20,6 +21,7 @@ class SubscribePointCloud():
         self.Points=0
         rospy.init_node('subscribe_custom_point_cloud')
         self.listener = tf.TransformListener()
+        self.publisher = rospy.Publisher('/pcl/near_points',PointCloud2)
         #self.t = self.listener.getLatestCommonTime('/base_link','/base_forZED')
 
         rospy.Subscriber('/rtabmap/cloud_map', PointCloud2, self.callback)
@@ -33,6 +35,7 @@ class SubscribePointCloud():
         #print(self.Points)
         print('\n\n  1   \nPoints  =  '+ str(len(self.Points))+'\n\n')
         self.calc()
+        self.Publish()
         
     
     def calc(self):
@@ -46,6 +49,18 @@ class SubscribePointCloud():
         
         print('Points  =  '+ str(len(self.Points)))
         print('It took '+str(time.time()-self.starttime)+' sec')
+
+    def Publish(self):
+        near_points = PointCloud2()
+        header = std_msgs.msg.Header()
+        header.stamp = rospy.Time.now()
+        header.frame_id = 'world'
+
+        near_points = pc2.create_cloud_xyz32(header,self.Points)
+
+        self.publisher.publish(near_points)
+
+
 
     def getpoints(self):
         return self.Points
