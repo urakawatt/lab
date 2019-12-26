@@ -69,13 +69,13 @@ class MakeTF:
         
         print('trans = '+str(self.trans))
         self.br = tf.TransformBroadcaster()
-        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'base_forZED','world')
+        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'map','world')
 
 
     def Broadcast(self):
         if rospy.is_shutdown():
             return
-        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'base_forZED','world')
+        self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'map','world')
         
 
         

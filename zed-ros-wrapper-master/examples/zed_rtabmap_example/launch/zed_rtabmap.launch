@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
     <!-- RTAB-map Node-->
     <include file="$(find rtabmap_ros)/launch/rtabmap_forzed.launch">
-      <arg name="map_frame_id"                  value="base_forZED" />
+      <arg name="map_frame_id"                  value="map" />
       <arg name="rtabmap_args"                  value="--delete_db_on_start" />
       <arg name="rgb_topic"               	value="/$(arg zed_namespace)/$(arg zed_node_name)/rgb/image_rect_color" />
       <arg name="depth_topic"             	value="/$(arg zed_namespace)/$(arg zed_node_name)/depth/depth_registered" />

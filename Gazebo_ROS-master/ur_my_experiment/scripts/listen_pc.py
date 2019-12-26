@@ -39,7 +39,7 @@ class SubscribePointCloud():
         
     
     def calc(self):
-        self.listener.waitForTransform('world','base_forZED',rospy.Time(0),rospy.Duration(2.0))
+        self.listener.waitForTransform('world','map',rospy.Time(0),rospy.Duration(2.0))
         self.Points=[self.from_base(data) for data in self.Points]                  # 座標データをworld 座標系に変換
         #print(self.Points)
         print('\n\n    2   \nPoints  =  '+ str(len(self.Points))+'\n\n')
@@ -70,7 +70,7 @@ class SubscribePointCloud():
             return
         # tf を使って data に与えられる座標データを base_link 座標系に変換
         coo = geometry_msgs.msg.PoseStamped()
-        coo.header.frame_id = 'base_forZED'
+        coo.header.frame_id = 'map'
         coo.pose.orientation.w=1.0
         coo.pose.position.x=data[0]
         coo.pose.position.y=data[1]
