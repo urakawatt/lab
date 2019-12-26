@@ -4,7 +4,7 @@
 #pcl_linstener .cpp でダウンサンプルした点群の　座標とかを取ってきて処理とかして subreaching .py に渡す
 
 import rospy
-from sensor_msgs.msg import PointCloud2
+from sensor_msgs.msg import PointCloud2,PointField
 import sensor_msgs.point_cloud2 as pc2
 import tf
 import geometry_msgs.msg
@@ -17,31 +17,42 @@ class SubscribePointCloud():
     def __init__(self):
         #print('aaaaa')
         
-
         self.Points=0
         rospy.init_node('subscribe_custom_point_cloud')
         self.listener = tf.TransformListener()
         #self.t = self.listener.getLatestCommonTime('/base_link','/base_forZED')
 
-        rospy.Subscriber('/pcl/downsampling', PointCloud2, self.callback)
+        rospy.Subscriber('/rtabmap/cloud_map', PointCloud2, self.callback)
         
         
 
     def callback(self, point_cloud):
-        starttime=time.time()
+        self.starttime=time.time()
+        print('\n\n\nCallBack!!!!!!!!\n\n\n')
+        self.Points=[ data[0:3] for data in pc2.read_points(point_cloud)]           # データを x,y,z の形に整形
+        #print(self.Points)
+        print('\n\n  1   \nPoints  =  '+ str(len(self.Points))+'\n\n')
+        self.calc()
+        
     
-        self.Points=[ data[0:3] for data in pc2.read_points(point_cloud)]
-        self.Points=[self.from_base(data) for data in self.Points]
-        self.Points=[data for data in self.Points if self.Size(data)<0.5**2]
+    def calc(self):
+        
+        self.Points=[self.from_base(data) for data in self.Points]                  # 座標データをworld 座標系に変換
+        #print(self.Points)
+        print('\n\n    2   \nPoints  =  '+ str(len(self.Points))+'\n\n')
+        self.Points=[data for data in self.Points if self.Size(data)<0.5**2]        # ワールド座標系から見たときに半径0.5m より近くにあるデータだけを残す
+        #print(self.Points)
+        print('\n\n   3    \n\n\n')
         
         print('Points  =  '+ str(len(self.Points)))
-        print('It took '+str(time.time()-starttime)+' sec')
-    
+        print('It took '+str(time.time()-self.starttime)+' sec')
 
     def getpoints(self):
         return self.Points
 
     def from_base(self,data):
+        if rospy.is_shutdown():
+            return
         # tf を使って data に与えられる座標データを base_link 座標系に変換
         coo = geometry_msgs.msg.PoseStamped()
         coo.header.frame_id = 'zed_camera_center'
@@ -53,13 +64,19 @@ class SubscribePointCloud():
         return [result.pose.position.x ,result.pose.position.y ,result.pose.position.z]
 
     def Size(self,data):
+        if rospy.is_shutdown():
+            return
         return data[0]**2 + data[1]**2 + data[2]**2
 
 def main():
     try:
-        sub=SubscribePointCloud()
-        print(sub.getpoints())
-        rospy.spin()
+        while not rospy.is_shutdown():
+            sub=SubscribePointCloud()
+            #print(sub.getpoints())
+            rospy.sleep(500)  #1秒スリープ
+            break
+
+        
     except rospy.ROSInterruptException:
         pass
 
