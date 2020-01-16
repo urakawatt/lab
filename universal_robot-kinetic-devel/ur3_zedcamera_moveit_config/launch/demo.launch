@@ -29,9 +29,8 @@
   <!-- If needed, broadcast static tf for robot root -->
   
 
-        <!-- ↓ここから！！！！！！！ -->
-
-
+  
+   <!-- ↓ここから！！！！！！！ -->
   <!-- We do not have a robot connected, so publish fake joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="$(arg use_gui)"/>
@@ -39,16 +38,13 @@
   </node>
 
   <!-- Given the published joint states, publish tf for the robot links -->
-  <node name="robot_zed_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
-
-
-        <!-- ↑ここまでは実機を使うときはコメントアウト -->
-
-
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />       
+  
+   <!-- ↑ここまでは実機を使うときはコメントアウト -->
   <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
   <include file="$(find ur3_zedcamera_moveit_config)/launch/move_group.launch">
     <arg name="allow_trajectory_execution" value="true"/>
-    <arg name="fake_execution" value="false"/>
+    <arg name="fake_execution" value="true"/>
     <arg name="info" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
     <arg name="pipeline" value="$(arg pipeline)"/>
@@ -61,8 +57,8 @@
   </include>
 
   <!-- If database loading was enabled, start mongodb as well -->
-  <!-- <include file="$(find ur3_zedcamera_moveit_config)/launch/default_warehouse_db.launch" if="$(arg db)">
+  <include file="$(find ur3_zedcamera_moveit_config)/launch/default_warehouse_db.launch" if="$(arg db)">
     <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
-  </include> -->
+  </include>
 
 </launch>
