@@ -1,0 +1,15 @@
+<launch>
+    <!-- ur3の動作計画 -->
+  <!-- <include file="$(find ur3_zedcamera_moveit_config)/launch/ur3_moveit_planning_execution.launch"/>
+
+  <node pkg="ur_my_experiment" name="broadcast_ZEDbase.py" type="broadcast_ZEDbase.py"/> -->
+
+<!-- zed camera で　rtabmap の起動 -->
+  <include file="$(find zed_rtabmap_example)/launch/zed_rtabmap.launch"/>
+
+<!-- rtabmap に　octomap を適用 -->
+  <include file="$(find ur_my_experiment)/launch/octomap_mapping.launch"/>
+
+<!-- moveit を rviz で可視化 -->
+  <include file="$(find ur3_zedcamera_moveit_config)/launch/moveit_rviz.launch"/>
+</launch>

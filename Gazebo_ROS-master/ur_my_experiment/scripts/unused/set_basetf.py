@@ -17,12 +17,7 @@ def set_basetf():#ee_link のっ場所に回転なしの tf を設置
     (trans,rot)=listener.lookupTransform('/world','/camera_base',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
     
     br = tf.TransformBroadcaster()
-    br.sendTransform(trans,(0,0,0,1),rlink>
-
-    <joint name="${prefix}shoulder_pan_joint" type="revolute">
-      <parent link="${prefix}base_link" />
-      <child link = "${prefix}shoulder_link" />
-      <origin xyz="0.0 0.0 ${shoulder_height}" rpy="0.0 0.0 0.0" />ospy.Time.now(),'base_forZED','world')
+    br.sendTransform(trans,(0,0,0,1),rospy.Time.now(),'base_forZED','world')
 
 if __name__ == '__main__':
 
