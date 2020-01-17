@@ -51,6 +51,8 @@ class MakeTF:
 
     def __init__(self):
         rospy.init_node('tf_zedbase', anonymous=True)#ノードの初期化　reaching ていう名前
+        if rospy.is_shutdown():
+            return
         self.set_ZEDbase()
 
     
@@ -59,8 +61,12 @@ class MakeTF:
         if rospy.is_shutdown():
             return
         listener.waitForTransform('world','camera_base',rospy.Time(0),rospy.Duration(2.0))
+        if rospy.is_shutdown():
+            return
         (self.trans,self.rot)=listener.lookupTransform('/world','/camera_base',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
         # x,y 平面は world のxy平面　と平行にしたいけど　z 軸回転はそのまま残したいので　roll pitch yaw に変換して yaw だけ残してほかは０にする
+        if rospy.is_shutdown():
+            return
         self.rot = euler_to_quaternion((0,0,quaternion_to_euler(self.rot)[2]))
 
         if rospy.is_shutdown():
@@ -69,13 +75,19 @@ class MakeTF:
         
         print('trans = '+str(self.trans))
         self.br = tf.TransformBroadcaster()
+        if rospy.is_shutdown():
+            return
         self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'map','world')
+        if rospy.is_shutdown():
+            return
 
 
     def Broadcast(self):
         if rospy.is_shutdown():
             return
         self.br.sendTransform((self.trans[0],self.trans[1],self.trans[2]),self.rot,rospy.Time.now(),'map','world')
+        if rospy.is_shutdown():
+            return
         
 
         
@@ -86,7 +98,9 @@ if __name__ == '__main__':
         m = MakeTF()
         
         while not rospy.is_shutdown():
-             m.Broadcast()
+            if rospy.is_shutdown():
+                return
+            m.Broadcast()
         
     except rospy.ROSInterruptException:
         pass
