@@ -74,6 +74,8 @@ class MakeTF:
         if rospy.is_shutdown():
             return
         self.rot = euler_to_quaternion((0,0,quaternion_to_euler(self.rot)[2]))
+        
+        # self.trans[1]= 0.05+self.trans[1]
 
         if rospy.is_shutdown():
             return

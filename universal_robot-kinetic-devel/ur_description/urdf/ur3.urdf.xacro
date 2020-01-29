@@ -358,8 +358,10 @@
   <joint name="${prefix}to_camera_base" type="fixed">
       <parent link="${prefix}camera_mount_link" />
       <child link = "${prefix}camera_base" />
-      <origin xyz="${0.065} ${0.0} ${0.008+0.00724}" rpy="${pi} ${3*pi/2.0} ${0}" />
+      <origin xyz="${0.065} ${0.0} ${0.008+0.008+0.00724+0.0325}" rpy="${pi} ${3*pi/2.0} ${0}" />
     </joint>
+
+
 
     <link name="${prefix}camera_base">
       <collision>
