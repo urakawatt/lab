@@ -52,6 +52,8 @@ def euler_to_quaternion(euler):
 class MakeTF:
 
     def __init__(self):
+        if rospy.is_shutdown():
+            return
         rospy.init_node('tf_zedbase', anonymous=True)#ノードの初期化　reaching ていう名前
         if rospy.is_shutdown():
             return
@@ -59,13 +61,15 @@ class MakeTF:
 
     
     def set_ZEDbase(self):
+        if rospy.is_shutdown():
+            return
         listener = tf.TransformListener()
         if rospy.is_shutdown():
             return
-        listener.waitForTransform('world','zed_base_link',rospy.Time(0),rospy.Duration(2.0))
+        listener.waitForTransform('world','zbase_link',rospy.Time(0),rospy.Duration(2.0))
         if rospy.is_shutdown():
             return
-        (self.trans,self.rot)=listener.lookupTransform('/world','/zed_base_link',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
+        (self.trans,self.rot)=listener.lookupTransform('/world','/zbase_link',rospy.Time(0)) # trans(x,y,z) rot (x,y,z,w)
         # x,y 平面は world のxy平面　と平行にしたいけど　z 軸回転はそのまま残したいので　roll pitch yaw に変換して yaw だけ残してほかは０にする
         if rospy.is_shutdown():
             return

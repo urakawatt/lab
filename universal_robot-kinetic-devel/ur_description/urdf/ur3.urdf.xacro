@@ -358,7 +358,7 @@
   <joint name="${prefix}to_camera_base" type="fixed">
       <parent link="${prefix}camera_mount_link" />
       <child link = "${prefix}camera_base" />
-      <origin xyz="${0.065} ${0.0} ${0.000}" rpy="${pi} ${3*pi/2.0} ${0}" />
+      <origin xyz="${0.065} ${0.0} ${0.008+0.00724}" rpy="${pi} ${3*pi/2.0} ${0}" />
     </joint>
 
     <link name="${prefix}camera_base">
@@ -373,22 +373,10 @@
 <!-- 14.48/2 -->
  <joint name="${prefix}zed_base_joint" type="fixed">
       <parent link="${prefix}camera_base" />
-      <child link = "${prefix}zed_base_link" />
+      <child link = "${prefix}zbase_link" />
       <!-- z= 0.008+0.01018-->
-      <origin xyz="${0.008+0.00724} ${0} ${0}" rpy="${0} ${0} ${0}" />
+      <origin xyz="${0} ${0} ${0}" rpy="${0} ${0} ${0}" />
     </joint>
-
- <link name="${prefix}zed_base_link">
-      <collision>
-        <geometry>
-          <box size="0.01 0.01 0.01"/>
-        </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-      </collision>
-    </link>
-
-
-
 
 
 
