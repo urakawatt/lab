@@ -89,10 +89,10 @@ class Reaching:
         joint_names = ["shoulder_pan_joint", "shoulder_lift_joint",		#ジョイントの名前を定義
                         "elbow_joint", "wrist_1_joint",
                         "wrist_2_joint", "wrist_3_joint"]
-        pose = [-1.26 , -0.64 , -2.44 , -0.66 , 1.56 , 0.007]
-        move_group.moveToJointPosition(joint_names, pose, wait=False)#joint_names を pose に動かす
-        move_group.get_move_action().wait_for_result()      #wait result
-        result = move_group.get_move_action().get_result()  #result を代入
+        # pose = [-1.26 , -0.64 , -2.44 , -0.66 , 1.56 , 0.007]
+        # move_group.moveToJointPosition(joint_names, pose, wait=False)#joint_names を pose に動かす
+        # move_group.get_move_action().wait_for_result()      #wait result
+        # result = move_group.get_move_action().get_result()  #result を代入
         move_group.get_move_action().cancel_all_goals()     #すべてのゴールをキャンセル
 
         self.state={'default':0,'hold':1,'way_standby':2,'plan_standby':3}
